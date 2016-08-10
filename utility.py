@@ -87,6 +87,37 @@ def _setup_logging():
     log_level = convert_log_level(log_level)
 
     logging.basicConfig(level=log_level, filename=fn, format=fmt)
+    return logging.getLogger('root')
+
+
+# def _create_logger():
+#     """ 
+#     Creates a logger based on the python logging package. Supposed to be 
+#     called only once.
+
+#     Original code from:
+#     http://stackoverflow.com/questions/7621897/python-logging-module-globally
+#     """
+
+#     # use the config object
+#     global config
+
+#     filename = config['logging']['log_file']
+#     filename = get_current_path() + '\\' + filename
+
+#     formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
+#     handler = logging.FileHandler(filename)
+#     handler.setFormatter(formatter)
+
+#     logger_name = config['logging']['logger_name']
+#     log_level = config['logging']['log_level']
+#     log_level = convert_log_level(log_level)
+
+#     logger = logging.getLogger(logger_name)
+#     logger.setLevel(log_level)
+#     logger.addHandler(handler)
+    
+#     return logger
 
 
 
