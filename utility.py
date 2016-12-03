@@ -45,9 +45,21 @@ if not 'config' in globals():
 
 
 
+def get_base_directory():
+	"""
+	The directory where the log file resides.
+	"""
+	global config
+	directory = config['logging']['directory']
+	if directory == '':
+		directory = get_current_path()
+
+	return directory
+
+
+
 def _setup_logging():
-    fn = config['logging']['log_file']
-    fn = get_current_path() + '\\' + fn
+    fn = get_base_directory() + '\\' + config['logging']['log_file']
     log_level = config['logging']['log_level']
     return get_file_logger(fn, log_level)
 
@@ -56,50 +68,3 @@ def _setup_logging():
 # initialized only once when this module is first imported by others
 if not 'logger' in globals():
 	logger = _setup_logging()
-
-
-
-def get_datemode():
-	"""
-	Read datemode from the config object and return it (in integer)
-	"""
-	global config, logger
-	d = config['excel']['datemode']
-	try:
-		datemode = int(d)
-	except:
-		logger.error('get_datemode(): invalid datemode value: {0}'.format(d))
-		raise InvalidDatamode()
-
-	return datemode
-
-
-
-def get_input_directory():
-	"""
-	Read directory from the config object and return it.
-	"""
-	global config
-	directory = config['input']['directory']
-	if directory.strip() == '':
-		directory = get_current_path()
-
-	return directory
-
-
-
-def get_record_fields():
-	"""
-	Return the list of data fields used by Geneva 'TransactionRecord'
-	quick import file.
-	"""
-	fields = ['RecordType', 'RecordAction', 'KeyValue', 'KeyValue.KeyName', 
-				'UserTranId1', 'Portfolio', 'LocationAccount', 'Strategy', 
-				'Investment', 'Broker', 'EventDate', 'SettleDate', 
-				'ActualSettleDate', 'Quantity', 'Price', 'PriceDenomination',
-				'CounterInvestment', 'NetInvestmentAmount', 'NetCounterAmount', 
-				'TradeFX', 'NotionalAmount', 'FundStructure', 'CounterFXDenomination',
-				'CounterTDateFx', 'AccruedInterest', 'InvestmentAccruedInterest',
-				'trade_expenses']
-
-	return fields

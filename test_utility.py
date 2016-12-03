@@ -2,8 +2,7 @@
 # 
 # Illustrate how to use the logging and config file utility.
 #
-from config_logging.file_logger import get_file_logger
-from config_logging.utility import get_current_path, logger
+from config_logging.utility import logger
 
 import random
 import time
