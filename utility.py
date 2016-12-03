@@ -1,14 +1,11 @@
 # coding=utf-8
 # 
-# This file contains sample code for logging and config file. When this
-# module is imported, it will initialize logging and read the config file
-# and load the config object.
-#
-# See test_utility.py on how to use it.
+# from config_logging package, provides a config object (from config file)
+# and a logger object (logging to a file).
 # 
-import logging
 import configparser
 import os
+from config_logging.file_logger import get_file_logger
 
 
 
@@ -48,79 +45,61 @@ if not 'config' in globals():
 
 
 
-def convert_log_level(log_level):
-	"""
-	Convert the log level specified in the config file to the numerical
-	values required by the logging module.
-	"""
-	if log_level == 'debug':
-		return logging.DEBUG
-	elif log_level == 'info':
-		return logging.INFO
-	elif log_level == 'warning':
-		return logging.WARNING
-	elif log_level == 'error':
-		return logging.ERROR
-	elif log_level == 'critical':
-		return logging.CRITICAL
-	else:
-		return logging.DEBUG
-
-
-
 def _setup_logging():
-    """ 
-    Setup logging parameters, supposed to be called only once.
-
-    Original code from:
-    https://gimmebar-assets.s3.amazonaws.com/4fe38b76be0a5.html
-    """
-
-    # use the config object
-    global config
-
     fn = config['logging']['log_file']
     fn = get_current_path() + '\\' + fn
-
-    fmt='%(asctime)s - %(module)s - %(levelname)s: %(message)s'
     log_level = config['logging']['log_level']
-    log_level = convert_log_level(log_level)
-
-    logging.basicConfig(level=log_level, filename=fn, format=fmt)
-    return logging.getLogger('root')
-
-
-# def _create_logger():
-#     """ 
-#     Creates a logger based on the python logging package. Supposed to be 
-#     called only once.
-
-#     Original code from:
-#     http://stackoverflow.com/questions/7621897/python-logging-module-globally
-#     """
-
-#     # use the config object
-#     global config
-
-#     filename = config['logging']['log_file']
-#     filename = get_current_path() + '\\' + filename
-
-#     formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
-#     handler = logging.FileHandler(filename)
-#     handler.setFormatter(formatter)
-
-#     logger_name = config['logging']['logger_name']
-#     log_level = config['logging']['log_level']
-#     log_level = convert_log_level(log_level)
-
-#     logger = logging.getLogger(logger_name)
-#     logger.setLevel(log_level)
-#     logger.addHandler(handler)
-    
-#     return logger
+    return get_file_logger(fn, log_level)
 
 
 
 # initialized only once when this module is first imported by others
 if not 'logger' in globals():
 	logger = _setup_logging()
+
+
+
+def get_datemode():
+	"""
+	Read datemode from the config object and return it (in integer)
+	"""
+	global config, logger
+	d = config['excel']['datemode']
+	try:
+		datemode = int(d)
+	except:
+		logger.error('get_datemode(): invalid datemode value: {0}'.format(d))
+		raise InvalidDatamode()
+
+	return datemode
+
+
+
+def get_input_directory():
+	"""
+	Read directory from the config object and return it.
+	"""
+	global config
+	directory = config['input']['directory']
+	if directory.strip() == '':
+		directory = get_current_path()
+
+	return directory
+
+
+
+def get_record_fields():
+	"""
+	Return the list of data fields used by Geneva 'TransactionRecord'
+	quick import file.
+	"""
+	fields = ['RecordType', 'RecordAction', 'KeyValue', 'KeyValue.KeyName', 
+				'UserTranId1', 'Portfolio', 'LocationAccount', 'Strategy', 
+				'Investment', 'Broker', 'EventDate', 'SettleDate', 
+				'ActualSettleDate', 'Quantity', 'Price', 'PriceDenomination',
+				'CounterInvestment', 'NetInvestmentAmount', 'NetCounterAmount', 
+				'TradeFX', 'NotionalAmount', 'FundStructure', 'CounterFXDenomination',
+				'CounterTDateFx', 'AccruedInterest', 'InvestmentAccruedInterest',
+				'trade_expenses']
+
+	return fields

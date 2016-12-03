@@ -2,34 +2,17 @@
 # 
 # Illustrate how to use the logging and config file utility.
 #
+from config_logging.file_logger import get_file_logger
+from config_logging.utility import get_current_path, logger
 
-
-import logging
-from config_logging.utility import config, logger 	# the log and config object
-
-
-
-def foo():
-	global config 	# access the config object
-	print('config file has sections: {0}'.format(config.sections()))
-
-	x = 5
-	y = config['func']['value']	# read a string value from config object
-	logger.debug('value = {0}'.format(x * y))
-
-	try:
-		bar()
-	except:
-		# show how log an exception
-		logger.exception("something is wrong")
-
-
-
-def bar():
-	raise ValueError()
+import random
+import time
 
 
 
 if __name__ == '__main__':
-	foo()
 
+	for i in range(5):
+		delay = random.randint(0, 5)
+		time.sleep(delay/10)
+		logger.error('test {0}'.format(i))
