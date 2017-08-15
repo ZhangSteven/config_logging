@@ -8,7 +8,7 @@ import logging.config
 
 
 
-def _get_logger():
+def setup_logger():
 	"""
 	Read the logging configuration file, return a logger. With the logger,
 	you can:
@@ -21,10 +21,4 @@ def _get_logger():
 	https://stackoverflow.com/a/17100643/3331297
 	"""
 	logging.config.fileConfig('logging.config')
-	return logging.getLogger('applog')
 
-
-
-# initialized only once when this module is first imported by others
-if not 'logger' in globals():
-	logger = _get_logger()
