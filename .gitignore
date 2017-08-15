@@ -2,5 +2,5 @@
 __pycache__/
 
 # ignore the log file
-*.log
-*.log.*
+applog.log
+applog.log.*

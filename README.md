@@ -1,13 +1,18 @@
 # config_logging
 
-Illustrate a common way to use the python configuration file and logging.
+Illustrate a common way to use python logging.
 
 To test, run:
 
-	python test_utility
+	python test_log.py
 
-To use, copy sample.config and utility.py file to the project directory, then do:
+To use logging:
 
-	from <package_name>.utility import logger
+1. Copy the logging.config file to the package you are using.
+2. Default settings in logging.config:
+	a) log to console and file at the same time.
+	b) console log level is WARNING and file log level is DEBUG.
+	c) log file name is applog.log in local directory, with 5 rotating files, each of size 20KB.
 
-where the <package_name> is the project package name.
+3. Initialize root logger at program entry point, before any getLogger() calls, by (see test_log.py):
+	logging.config.fileConfig(logging.config), 
