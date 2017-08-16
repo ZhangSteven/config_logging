@@ -24,12 +24,15 @@ def do_log():
 if __name__ == '__main__':
 	import logging.config
 
-	# NOTE: disable_existing_loggers must be explicitly set to False, otherwise
-	# 	it will disable exising loggers. In our case, all the loggers. Because
-	# 	those loggers are created when the modules are imported.
+	# NOTE: This won't work as disable_existing_loggers must be explicitly set 
+	# 	to False, otherwise it will disable exising loggers. In our case, all the 
+	# 	loggers. Because those loggers are created when the modules are imported.
 	# 
 	# logging.config.fileConfig('logging.config')
-	logging.config.fileConfig('logging.config', disable_existing_loggers=False)
+
+	# Choose the config file for logging.
+	# logging.config.fileConfig('logging.config', disable_existing_loggers=False)
+	logging.config.fileConfig('logging-more.config', disable_existing_loggers=False)
 
 	do_work()
 	do_divided_by_zero()

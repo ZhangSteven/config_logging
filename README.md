@@ -16,3 +16,6 @@ To use logging:
 
 3. Initialize root logger at the main module (see main.py):
 	logging.config.fileConfig(logging.config, disable_existing_loggers=False)
+
+4. logging-more.config add another file handler to root logger, so that one log file
+	captures all log messages, the other log file captures only errors.
